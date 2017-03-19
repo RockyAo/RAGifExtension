@@ -14,7 +14,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let array = UIImageView.decodeGifImage(gifPath: Bundle.main.path(forResource: "plane", ofType: ".gif"))
+        let imageView = UIImageView()
+        imageView.frame = self.view.bounds
+        imageView.contentMode = UIViewContentMode.center
+        self.view.addSubview(imageView)
+        
+        imageView.gifImage(path:Bundle.main.path(forResource: "plane", ofType: ".gif")! )
+        
+        
+        let array = UIImage.decodeGifImage(gifPath: Bundle.main.path(forResource: "plane", ofType: ".gif"))
         
         print(array)
         

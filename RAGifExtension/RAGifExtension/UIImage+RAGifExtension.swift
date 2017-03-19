@@ -12,13 +12,32 @@ import ImageIO
 extension UIImageView{
     
     
+    func gifImage(path:String,repeatCount:Int = 100){
+        
+        let imageArray = UIImage.decodeGifImage(gifPath: path)
+        
+        self.animationImages = imageArray
+        
+        ///更改播放时间
+        self.animationDuration = Double(imageArray.count) * 0.03
+        
+        self.animationRepeatCount = repeatCount
+        
+        self.startAnimating()
+    }
     
+}
+
+
+// MARK: - 生成解析图片扩展
+extension UIImage {
+
     /// 分解Gif图片
     ///
     /// - Parameter gifPath: gif图片路径
     /// - Returns: 单个图片数组
     class func decodeGifImage(gifPath:String!) -> Array<UIImage>{
-    
+        
         var gifData:Data?
         
         do {
@@ -26,7 +45,7 @@ extension UIImageView{
             try gifData = Data(contentsOf: URL(fileURLWithPath: gifPath))
             
         }  catch {
-                
+            
             print("初始化数据失败 \(error)")
         }
         
@@ -36,7 +55,7 @@ extension UIImageView{
             
             return []
         }
-    
+        
         let imageSource:CGImageSource = CGImageSourceCreateWithData(gdata as CFData, nil)!
         
         let imageCount = CGImageSourceGetCount(imageSource)
@@ -47,7 +66,7 @@ extension UIImageView{
         for i in 0..<imageCount{
             
             guard let imageref = CGImageSourceCreateImageAtIndex(imageSource, i, nil) else{
-            
+                
                 print("分解图片失败")
                 
                 break
@@ -56,11 +75,12 @@ extension UIImageView{
             let image = UIImage(cgImage: imageref, scale: UIScreen.main.scale, orientation: UIImageOrientation.up)
             
             imageArray.append(image)
+        
         }
+        
+        
         
         return imageArray
     }
-    
-    
     
 }
